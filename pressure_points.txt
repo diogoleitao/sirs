@@ -1,0 +1,9 @@
+pressure points
+	tags
+		script
+
+	attributes
+		href
+		src
+		action
+		data

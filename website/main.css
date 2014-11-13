@@ -1,0 +1,73 @@
+/* GENERAL STYLING */
+
+* {
+	font-family: sans-serif;
+	color: black;
+}
+
+nav {
+	margin-left: 500px;
+	margin-bottom: 50px;
+}
+
+nav > a {
+	text-decoration: none;
+}
+
+nav > a > div {
+	font-size: 18px;
+	display: inline-block;
+	border: 1px solid black;
+	padding: 5px;
+	margin-right: 3px;
+	text-align: center;
+
+	width: 150px;
+}
+
+nav > a > div:active {
+	color: white;
+	background: black;
+}
+
+/* THE COMPANY */
+
+/* NEWS */
+
+.news {
+	position: relative;
+	width: 100%;
+	left: 50px;
+	margin-right: 150px;
+}
+
+.news .news_item {
+	width: 27%;
+	float: left;
+	padding: 5px;
+	margin-right: 40px;
+	margin-bottom: 20px;
+	border-radius: 20px;
+	display: inline-block;
+	background-color: #BCF2FF;
+
+}
+
+/* PROJECTS */
+
+/* CONTACTS */
+
+.form {
+	width: 30%;
+	border: 1px solid black;
+	position: relative;
+	border-radius: 10%;
+}
+
+.mailingList {
+	text-align: center;
+}
+
+.feedback {
+	padding: 10px 0 20px 30px;
+}
