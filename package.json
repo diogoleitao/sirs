@@ -1,0 +1,32 @@
+{
+  "name": "Sirs.js",
+  "version": "0.0.1",
+  "description": "This is a crawler-scanner toolchain project made for IST MEIC's class on Network and Computer Security for assessing SQL/XSS vulnerabilities on websites.",
+  "main": "main.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/diogoleitao/sirs.git"
+  },
+  "keywords": [
+    "sirs",
+    "meic",
+    "ist",
+    "scanner",
+    "crawler"
+  ],
+  "author": "Ana Araújo, Diogo Leitão, Tomás Pinho",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/diogoleitao/sirs/issues"
+  },
+  "homepage": "https://github.com/diogoleitao/sirs",
+  "dependencies": {
+    "phantomjs": "^1.9.12"
+  }
+}
