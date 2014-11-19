@@ -32,6 +32,10 @@ nav > a > div:active {
 
 /* THE COMPANY */
 
+ul li {
+	list-style-type: none;
+}
+
 /* NEWS */
 
 .news {
@@ -62,9 +66,10 @@ nav > a > div:active {
 	border: 1px solid black;
 	position: relative;
 	border-radius: 10%;
+	display: inline-block;
 }
 
-.mailingList {
+.testimonial {
 	text-align: center;
 }
 
