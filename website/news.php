@@ -28,8 +28,7 @@
 		<div class="news_item">
 			<h4>Latest addition to the team</h4>
 			<p>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat hic reprehenderit fugiat, quisquam sapiente numquam enim vero aut laborum?<br>
-				Adipisci, ipsum incidunt sit illum soluta eaque rem ut earum officiis.
+				Last week our new employee joined our backend team.
 			</p>
 		</div>
 		<div class="news_item">
@@ -44,7 +43,7 @@
 			<p>
 				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat hic reprehenderit fugiat, quisquam sapiente numquam enim vero aut laborum?<br>
 				Adipisci, ipsum incidunt sit illum soluta eaque rem ut earum officiis.<br>
-				Download it here: <input type="button" value="Download!">
+				Download it here: <form action="download.php"><input type="submit" value="Download!"></form>
 			</p>
 		</div>
 		<div class="news_item">
