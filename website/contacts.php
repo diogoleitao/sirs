@@ -47,27 +47,19 @@
 			}
 
 			$db_selected = mysql_select_db($dbname, $conlink);
-			if (!$db_selected) {
+			if (!$db_selected)
 				die(mysql_error());
-			}
 
 			$result = "SELECT testimonial FROM $tablename";
 
 			if (mysqli_num_rows($result) > 0) {
-				echo "<p>";
-			    while($row = mysqli_fetch_assoc($result)) {
-					echo $row['testimonial'] . "<br>";
-				}
-				echo "</p>";
+				$i = 0;
+				echo "<ul>";
+			    while ($row = mysqli_fetch_assoc($result))
+					echo "<li id=" . $i++ . ">" . $row['testimonial'] . "</li>";
+				echo "</ul>";
 			}
 		?>
-		<p>
-			“It’s just brilliant. I will recommend it to everyone I know!”<br>
-			“I’m really glad these guys got out there. I’ve bought it and now I think perhaps I should have invested!”<br>
-			"Wow! That says it all really. ★★★★"<br>
-			“What a product! Why didn’t someone think of it sooner? ★★★★★ "<br>
-			“Get out there and buy it if you’re a customer and stock it if you’re a retailer – you’d be mad not to! ★★★★★ "<br>
-		</p>
 	</div>
 </body>
 </html>
