@@ -12,7 +12,6 @@
 */
 module.exports = {
 	run: function(url){
-		console.log("Url to be scanned is: " + url);
-		return "Test scan module was run against target url.";
+		return "Test scan module: run against target url.";
 	}
 }
