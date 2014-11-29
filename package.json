@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/diogoleitao/sirs",
   "dependencies": {
-    "phantomjs": "^1.9.12"
+    "phantomjs": "^1.9.12",
+    "sync-request": "^1.0.1"
   }
 }
