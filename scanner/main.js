@@ -5,6 +5,8 @@
 	in this package.
 */
 
+var utilities = require("./utilities/");
+
 /* Setting up reading from stdin */
 var readline = require('readline');
 
@@ -23,23 +25,14 @@ rl.on('close', function(){
 
 /* Setting up available scan modules */
 var scanModules = require('./modules/');
-
-/* Printing available scan modules */
-var listModules = "";
-Object.keys(scanModules).forEach(function(moduleName, moduleNameIndex, moduleNames){
-	listModules += moduleName + ", ";
-});
-
-listModules = listModules.slice(0, listModules.length - 2); //cutting out trailing ', '
-
-console.log("Available scan modules: " + listModules);
+console.log("Available scan modules: " + utilities.objectToCommaSeparatedString(scanModules));
 
 /* Running all available modules for all available urls */
 urls.forEach(function(url, urlIndex, urls){
-	console.log("Scanning url: " + url);
-	scanModules.forEach(function(module,moduleIndex,modules){
-		module.run(url);
-	});
+	console.log("Scanning url: " + url + " with " + Object.keys(scanModules).length + " modules.");
+	for(var moduleName in scanModules){
+		console.log(scanModules[moduleName].run(url));
+	}
 });
 
 process.exit();
