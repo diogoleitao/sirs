@@ -1,6 +1,8 @@
 //PhantomJS http://phantomjs.org/ based web crawler Anton Ivanov anton.al.ivanov@gmail.com 2012
 //UPDATE: This gist has been made into a Node.js module and now can be installed with "npm install js-crawler"
 //the Node.js version does not use Phantom.JS, but the API available to the client is similar to the present gist
+var args = require('system').args;
+var address = args[1];
 
 (function(host) {
 
@@ -12,8 +14,15 @@
 
     Crawler.prototype.crawl = function (url, depth, onSuccess, onFailure) {
         if (0 == depth || this.visitedURLs[url]) {
-            return;
+            function exit(code) {
+                if (page) page.close();
+                    setTimeout(function(){ phantom.exit(code); }, 0);
+                //phantom.onError = function(){};
+                //throw new Error('');
+            }
+           // return;
         };
+
         var self = this;
         var page = Crawler.webpage.create();
 
@@ -36,7 +45,10 @@
                 });
             };
         });
+
+    //phantom.exit();
     };
+
 
     Crawler.prototype.getAllURLs = function(page) {
         return page.evaluate(function () {
@@ -45,29 +57,28 @@
                     return link.getAttribute("href");
                 });
         });
+        page.close();
     };
 
-    Crawler.prototype.crawlURLs = function(urls, depth, onSuccess, onFailure) {
+
+Crawler.prototype.crawlURLs = function(urls, depth, onSuccess, onFailure) {
         var self = this;
-        urls.filter(function (url) {
-            return Crawler.isTopLevelURL(url);
-        }).forEach(function (url) {
+       urls.forEach(function (url) {
+            if(!(0 == url.indexOf("http")))
+                url = address + "/" + url;
             self.crawl(url, depth, onSuccess, onFailure);
         });
     };
 
-    Crawler.isTopLevelURL = function(url) {
-        return 0 == url.indexOf("http");
-    };
-
     host.Crawler = Crawler;
+
 })(phantom);
 
-new phantom.Crawler().crawl("http://web.ist.utl.pt/ist173214", 3, 
+new phantom.Crawler().crawl(address, 4, 
     function onSuccess(page) {
         console.log(page.url);
     }, 
     function onFailure(page) {
-        console.log("Could not load page. URL = " +  page.url + " status = " + page.status);
+        console.log("Could not load page. URL = " +  page.url );
     }
 );
