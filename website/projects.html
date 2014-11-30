@@ -11,16 +11,16 @@
 		<a href="index.html">
 			<div>Home</div>
 		</a>
-		<a href="news.html">
+		<a href="news.php">
 			<div>News</div>
 		</a>
 		<a href="projects.html">
 			<div>Projects</div>
 		</a>
-		<a href="company.html">
+		<a href="company.php">
 			<div>The company</div>
 		</a>
-		<a href="contacts.html">
+		<a href="contacts.php">
 			<div>Contacts</div>
 		</a>
 	</nav>

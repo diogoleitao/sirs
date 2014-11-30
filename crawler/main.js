@@ -63,9 +63,9 @@
     host.Crawler = Crawler;
 })(phantom);
 
-new phantom.Crawler().crawl("https://github.com/ariya/phantomjs/wiki/Quick-Start", 2, 
+new phantom.Crawler().crawl("http://web.ist.utl.pt/ist173214", 3, 
     function onSuccess(page) {
-        console.log("Loaded page. URL = " + page.url + " content length = " + page.content.length + " status = " + page.status);
+        console.log(page.url);
     }, 
     function onFailure(page) {
         console.log("Could not load page. URL = " +  page.url + " status = " + page.status);
