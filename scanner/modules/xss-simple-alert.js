@@ -43,9 +43,8 @@ module.exports = {
 						var prependAmpersand = (formBody.length != 0);
 						var inject = $(inputsArray[input]).attr("name") == $(inputsArray[testingInput]).attr("name"); 
 						formBody += (prependAmpersand ? "&" : "");
-						formBody += $(inputsArray[input]).attr("name") + "=" + (inject ? javaScript : "default");
+						formBody += $(inputsArray[input]).attr("name") + "=" + (inject ? javaScript : ($(inputsArray[input]).val() == "" || $(inputsArray[input]).val() == undefined ? "default" : $(inputsArray[input]).val()));
 					}
-
 					var res_form = request(method, urlObject.format(), { headers: {
 						"Content-Type": "application/x-www-form-urlencoded"
 					}, 
