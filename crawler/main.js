@@ -8,6 +8,7 @@ var address = args[1];
 
     function Crawler() {
         this.visitedURLs = {};
+        this.onQueue = {}
     };
     
     Crawler.webpage = require('webpage');
@@ -66,7 +67,13 @@ Crawler.prototype.crawlURLs = function(urls, depth, onSuccess, onFailure) {
        urls.forEach(function (url) {
             if(!(0 == url.indexOf("http")))
                 url = address + "/" + url;
-            self.crawl(url, depth, onSuccess, onFailure);
+            if (self.onQueue[url]){
+                return;
+            }
+            else{
+                self.onQueue[url] = true;
+                self.crawl(url, depth, onSuccess, onFailure);
+            }
         });
     };
 
@@ -74,7 +81,7 @@ Crawler.prototype.crawlURLs = function(urls, depth, onSuccess, onFailure) {
 
 })(phantom);
 
-new phantom.Crawler().crawl(address, 4, 
+new phantom.Crawler().crawl(address, 2, 
     function onSuccess(page) {
         console.log(page.url);
     }, 
