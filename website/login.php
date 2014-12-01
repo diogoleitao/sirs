@@ -1,6 +1,6 @@
 <?php
-	$name = $_REQUEST['name'];
-	$email = $_REQUEST['email'];
+	$username = $_POST['username'];
+	$password = $_POST['password'];
 
 			try{
 
@@ -10,9 +10,10 @@
 				$dbname = $user;
 				$db = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
 				$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				$sql = "INSERT INTO mailinglist values('$name', '$email');";
+				$sql = "SELECT username, password FROM login WHERE username = '$username' AND password = '$password'";
 				$result = $db->query($sql);
-				echo ("Subscription successful!");
+				if(!$result)
+					echo(mysql_error());
 				$db = null;
 			}
 			catch ( PDOException $e){
