@@ -1,7 +1,6 @@
 <?php
 	$name = $_POST['name'];
 	$email = $_POST['email'];
-	$feedback = $_POST['feedback'];
 
 	$dbhost = "localhost";
 	$dbuser = "root";
@@ -19,7 +18,7 @@
 		die(mysql_error());
 	}
 
-	$query = "INSERT INTO $tablename (name, email, example) VALUES ('$name', '$email', '$experience')";
+	$query = "INSERT INTO $tablename (name, email) VALUES ('$name', '$email')";
 	if (!mysqli_query($conlink, $query)) {
 		die(mysql_error());
 	}

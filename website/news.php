@@ -51,7 +51,7 @@
 			<p>
 				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat hic reprehenderit fugiat, quisquam sapiente numquam enim vero aut laborum?<br>
 				Adipisci, ipsum incidunt sit illum soluta eaque rem ut earum officiis.<br>
-				Follow him on twitter at <a href="http://example.com">@stevegates</a>
+				Follow him on twitter at <a href="http://www.example.com">@stevegates</a>
 			</p>
 		</div>
 	</div>

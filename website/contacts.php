@@ -35,13 +35,13 @@
 	<div class="testimonials">
 		<h3>Here are some of the fantastic things people have said about us:</h3>
 		<?php
-			$dbhost = "localhost";
-			$dbuser = "root";
-			$dbpass = "root";
-			$dbname = "table";
+			$host = "db.ist.utl.pt";
+			$user = "ist173214";
+			$pass = "quhh2828";
+			$dbname = $user;
 			$tablename = "testimonial";
 
-			$conlink = mysql_connect($dbhost, $dbuser, $dbpass);
+			$conlink = mysql_connect($host, $user, $pass);
 			if (!$conlink) {
 				die(mysql_error());
 			}
@@ -50,13 +50,13 @@
 			if (!$db_selected)
 				die(mysql_error());
 
-			$result = "SELECT testimonial FROM $tablename";
+			$result = "SELECT test FROM $tablename";
 
 			if (mysqli_num_rows($result) > 0) {
 				$i = 0;
 				echo "<ul>";
 			    while ($row = mysqli_fetch_assoc($result))
-					echo "<li id=" . $i++ . ">" . $row['testimonial'] . "</li>";
+					echo "<li id=" . $i++ . ">" . $row['test'] . "</li>";
 				echo "</ul>";
 			}
 		?>

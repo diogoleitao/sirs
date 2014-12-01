@@ -1,13 +1,13 @@
 <?php
-	$testimonial = $_POST['testimonial'];
+	$testimonial = $_POST['test'];
 
-	$dbhost = "localhost";
-	$dbuser = "root";
-	$dbpass = "root";
-	$dbname = "table";
+	$host = "db.ist.utl.pt";
+	$user = "ist173214";
+	$pass = "quhh2828";
+	$dbname = $user;
 	$tablename = "testimonial";
 
-	$conlink = mysql_connect($dbhost, $dbuser, $dbpass);
+	$conlink = mysql_connect($host, $user, $pass);
 	if (!$conlink) {
 		die(mysql_error());
 	}
@@ -17,7 +17,7 @@
 		die(mysql_error());
 	}
 
-	$query = "INSERT INTO $tablename (testimonial) VALUES ('$testimonial')";
+	$query = "INSERT INTO $tablename VALUES ('$test')";
 
 	if (!mysqli_query($conlink, $query)) {
 		die(mysql_error());

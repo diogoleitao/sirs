@@ -3,6 +3,7 @@
 //the Node.js version does not use Phantom.JS, but the API available to the client is similar to the present gist
 var args = require('system').args;
 var address = args[1];
+var depth1 = args[2];
 
 (function(host) {
 
@@ -81,7 +82,7 @@ Crawler.prototype.crawlURLs = function(urls, depth, onSuccess, onFailure) {
 
 })(phantom);
 
-new phantom.Crawler().crawl(address, 2, 
+new phantom.Crawler().crawl(address, depth1, 
     function onSuccess(page) {
         console.log(page.url);
     }, 
