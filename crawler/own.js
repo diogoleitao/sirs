@@ -5,54 +5,62 @@
 	on links represented as anchor tag href attributes.
 */
 var Url = require("url");
-var request = require('sync-request');
+var request = require('request');
 var cheerio = require("cheerio");
+var async = require("async");
 //var utilities = require("../utilities/");
 
-var markedToVisit = [];
-var toVisit = [];
-var result = [];
+var visited = [];
 var maximumPages = 100;
 
 /* Read initial URL and insert in the set of pages to visit and read the
  maximum of pages to crawl */
 var entryUrl = process.argv[2];
 entryUrl = Url.parse(entryUrl);
-toVisit.push(entryUrl.format());
 maximumPages = process.argv[3] || maximumPages;
 maximumPages = parseInt(maximumPages);
-/* While we still have pages to visit or we have reached the maximum 
-   number of pages, we crawl */
-while(toVisit.length != 0 && Object.keys(result).length < maximumPages){
-	var url = toVisit.pop();
+
+var queue = async.queue(function crawl(url, next) {
+	/* If we haven't seen the page to visit and we still haven't 
+	reached the maximum number of pages, we crawl */
+	if (Object.keys(visited).length >= maximumPages || visited[url]) return next(null);
 	// We parse the url just to make sure everything is ok
 	var urlObject = Url.parse(url, true);
 	if(urlObject.host == entryUrl.host){
 		// We make the request
-		var res = request('GET', urlObject.format());
-		if(res.statusCode == 200){
-			// We make the DOM ready
-			$ = cheerio.load(res.getBody().toString());
+		request({ uri: urlObject.format(), followRedirect: false }, function (error, response, body) {
+	 			if (!error && response.statusCode == 200) {
+	   				// We make the DOM ready
+					$ = cheerio.load(body.toString());
 			
-			// Get all anchor tags
-			var anchorTags = $("a");
+					// Get all anchor tags
+					var anchorTags = $("a");
 
-			/* For all anchor tags, grab the link and mark for visit in the feature
-			or don't, if we already have it visited */
-			anchorTags.each(function(index, anchortag){
-				var link = $(this).attr("href");
-				link = Url.resolve(entryUrl.format(), link);
-				if(markedToVisit[link] != true){
-					toVisit.push(link);
-					markedToVisit[link] = true;
-				}
-			});
-		}
-		result.push(urlObject.format());
+					/* For all anchor tags, grab the link and mark for visit in the feature
+					or don't, if we already have it visited */
+					anchorTags.each(function(index, anchortag){
+						var link = $(this).attr("href");
+						link = Url.resolve(entryUrl.format(), link);
+						queue.push(link);
+					});
+					visited[urlObject.format()] = true;
+	 			}
+	 			next(null);
+		});
+	} else {
+		next(null);
+	}	
+	}, 1);
+
+queue.push(entryUrl.format());
+queue.drain = function(){
+	// Output all visited pages
+	for(var link in visited){
+		console.log(link);
 	}
-}
+	//console.log(Object.keys(result).length)
+};
 
-// Output all visited pages
-for(var link in result){
-	console.log(result[link]);
-}
+	/*
+	if(!hasPrinted && toVisit.length == 0){
+		hasPrinted = true;*/
