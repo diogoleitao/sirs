@@ -1,22 +1,30 @@
 <?php
-	$username = $_POST['username'];
-	$password = $_POST['password'];
 
-			try{
+	$user_name = $_GET['username'];
+	$pwd = $_GET['password'];
 
-				$host = "db.ist.utl.pt";
-				$user = "ist173214";
-				$pass = "quhh2828";
-				$dbname = $user;
-				$db = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
-				$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				$sql = "SELECT username, password FROM login WHERE username = '$username' AND password = '$password'";
-				$result = $db->query($sql);
-				if(!$result)
-					echo(mysql_error());
-				$db = null;
-			}
-			catch ( PDOException $e){
-				echo($e);
-			}
+	$host = "db.ist.utl.pt";
+	$user = "ist173214";
+	$pass = "quhh2828";
+	$dbname = $user;
+			
+	$conlink = mysql_connect($host, $user, $pass);
+	if (!$conlink) {
+		die(mysql_error());
+	}
+
+	$db_selected = mysql_select_db($dbname, $conlink);
+	if (!$db_selected) {
+		die(mysql_error());
+	}
+	$query = "SELECT * FROM login WHERE username = '$user_name' AND password = '$pwd'";
+	$result = mysql_query($query);
+	if (mysql_num_rows($result) > 0) {
+		echo "<font color='#5EFB6E'><b>Welcome to administration, $username.</font></b><br>\n";
+	}
+	else{
+		echo "<font color='#F62817'><b>Error: Invalid username or password.</b></font><p>\n";
+			   // include("login.php");
+		mysql_close($db);
+	}
 ?>

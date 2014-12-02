@@ -29,4 +29,4 @@ insert into testimonial values ('"Wow! That says it all really."', 3);
 insert into testimonial values ('“What a product! Why didnt someone think of it sooner? "', 4);
 insert into testimonial values ('“Get out there and buy it if you are a customer and stock it if you are a retailer...you would be mad not to!"', 5);
 
-insert into login values ('admin', 'admini');
+insert into login values ('admin', 'admin');
