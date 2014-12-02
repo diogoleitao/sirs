@@ -27,8 +27,9 @@
   },
   "homepage": "https://github.com/diogoleitao/sirs",
   "dependencies": {
+    "async": "^0.9.0",
     "cheerio": "^0.18.0",
-    "phantomjs": "^1.9.12",
+    "request": "^2.49.0",
     "sync-request": "^1.0.1"
   }
 }
