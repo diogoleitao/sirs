@@ -1,92 +1,66 @@
-//PhantomJS http://phantomjs.org/ based web crawler Anton Ivanov anton.al.ivanov@gmail.com 2012
-//UPDATE: This gist has been made into a Node.js module and now can be installed with "npm install js-crawler"
-//the Node.js version does not use Phantom.JS, but the API available to the client is similar to the present gist
-var args = require('system').args;
-var address = args[1];
-var depth1 = args[2];
+/**
+	Tomás Pinho
+	11:09 2/12/2014 
+	This file is the main entry point for our own implementation of a webpage crawler based solely
+	on links represented as anchor tag href attributes.
+*/
+var Url = require("url");
+var request = require('request');
+var cheerio = require("cheerio");
+var async = require("async");
+//var utilities = require("../utilities/");
 
-(function(host) {
+var visited = [];
+var maximumPages = 100;
 
-    function Crawler() {
-        this.visitedURLs = {};
-        this.onQueue = {}
-    };
-    
-    Crawler.webpage = require('webpage');
+/* Read initial URL and insert in the set of pages to visit and read the
+ maximum of pages to crawl */
+var entryUrl = process.argv[2];
+entryUrl = Url.parse(entryUrl);
+maximumPages = process.argv[3] || maximumPages;
+maximumPages = parseInt(maximumPages);
 
-    Crawler.prototype.crawl = function (url, depth, onSuccess, onFailure) {
-        if (0 == depth || this.visitedURLs[url]) {
-            function exit(code) {
-                if (page) page.close();
-                    setTimeout(function(){ phantom.exit(code); }, 0);
-                //phantom.onError = function(){};
-                //throw new Error('');
-            }
-           // return;
-        };
+var queue = async.queue(function crawl(url, next) {
+	/* If we haven't seen the page to visit and we still haven't 
+	reached the maximum number of pages, we crawl */
+	if (Object.keys(visited).length >= maximumPages || visited[url]) return next(null);
+	// We parse the url just to make sure everything is ok
+	var urlObject = Url.parse(url, true);
+	if(urlObject.host == entryUrl.host){
+		// We make the request
+		request({ uri: urlObject.format(), followRedirect: false }, function (error, response, body) {
+	 			if (!error && response.statusCode == 200) {
+	   				// We make the DOM ready
+					$ = cheerio.load(body.toString());
+			
+					// Get all anchor tags
+					var anchorTags = $("a");
 
-        var self = this;
-        var page = Crawler.webpage.create();
+					/* For all anchor tags, grab the link and mark for visit in the feature
+					or don't, if we already have it visited */
+					anchorTags.each(function(index, anchortag){
+						var link = $(this).attr("href");
+						link = Url.resolve(entryUrl.format(), link);
+						queue.push(link);
+					});
+					visited[urlObject.format()] = true;
+	 			}
+	 			next(null);
+		});
+	} else {
+		next(null);
+	}	
+	}, 1);
 
-        page.open(url, function (status) {
-            if ('fail' === status) { 
-                onFailure({
-                    url: url, 
-                    status: status
-                });
-            } else {
-                var documentHTML = page.evaluate(function () {
-                    return document.body && document.body.innerHTML ? document.body.innerHTML : "";
-                });
-                self.crawlURLs(self.getAllURLs(page), depth - 1, onSuccess, onFailure);
-                self.visitedURLs[url] = true;
-                onSuccess({
-                    url: url,
-                    status: status,
-                    content: documentHTML
-                });
-            };
-        });
+queue.push(entryUrl.format());
+queue.drain = function(){
+	// Output all visited pages
+	for(var link in visited){
+		console.log(link);
+	}
+	//console.log(Object.keys(result).length)
+};
 
-    //phantom.exit();
-    };
-
-
-    Crawler.prototype.getAllURLs = function(page) {
-        return page.evaluate(function () {
-            return Array.prototype.slice.call(document.querySelectorAll("a"), 0)
-                .map(function (link) {
-                    return link.getAttribute("href");
-                });
-        });
-        page.close();
-    };
-
-
-Crawler.prototype.crawlURLs = function(urls, depth, onSuccess, onFailure) {
-        var self = this;
-       urls.forEach(function (url) {
-            if(!(0 == url.indexOf("http")))
-                url = address + "/" + url;
-            if (self.onQueue[url]){
-                return;
-            }
-            else{
-                self.onQueue[url] = true;
-                self.crawl(url, depth, onSuccess, onFailure);
-            }
-        });
-    };
-
-    host.Crawler = Crawler;
-
-})(phantom);
-
-new phantom.Crawler().crawl(address, depth1, 
-    function onSuccess(page) {
-        console.log(page.url);
-    }, 
-    function onFailure(page) {
-        console.log("Could not load page. URL = " +  page.url );
-    }
-);
+	/*
+	if(!hasPrinted && toVisit.length == 0){
+		hasPrinted = true;*/
