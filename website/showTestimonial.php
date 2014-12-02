@@ -1,32 +1,59 @@
 <?php
-	$id = "";
-	if (isset($_GET['id']))
-		$id = $_GET['id'];
 
-	$host = "db.ist.utl.pt";
-	$user = "ist173214";
-	$pass = "quhh2828";
-	$dbname = $user;
-	//$db = new PDO("mysql:host=$host; dbname=$dbname", $user, $password);
-	$tablename = "testimonial";
+	session_start();
 
-	$conlink = mysql_connect($host, $user, $dbpass);
-	if (!$conlink) {
-		die(mysql_error());
-	}
+	$id = $_GET["id"];
+	$_SESSION['next'] = $id+1;
+	$_SESSION['previous'] = $id-1;
+	
+	$counter = 0;
+		$host = "db.ist.utl.pt";
+		$user = "ist173214";
+		$pass = "quhh2828";
+		$dbname = $user;
 
-	$db_selected = mysql_select_db($dbname, $conlink);
-	if (!$db_selected) {
-		die(mysql_error());
-	}
+		$db = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				
+		$all = "SELECT * FROM testimonial;";
+		$process=$db->query($all);
 
-	$result = "SELECT test FROM $tablename WHERE id = $id";
-	if (mysqli_num_rows($result) > 0) {
-		echo "<p>";
-		$row = mysqli_fetch_assoc($result);
-		echo $row['test'];
-		echo "</p>";
-	}
+		foreach($process as $row){
+			$counter++;
+		}
 
-	header('Location: '. $_SERVER['REQUEST_URI']);
+		$link = "showTestimonial.php?id=";
+		$naddr = $link.$_SESSION['next'];
+		$paddr = $link.$_SESSION['previous'];
+
+		$sql = "SELECT * FROM testimonial WHERE id=$id;";
+		$result=$db->query($sql);
+
+		foreach($result as $try){
+			$text= $try['test'];
+			echo($text.'<br>');
+
+		}
+
+		if($id == 1){
+			echo "<a href='".$naddr."'>Show next testimonial</a>";
+		}
+		else if($id < $counter){
+			echo "<a href='".$paddr."'>Show previous testimonial</a>&nbsp;&nbsp;&nbsp;";
+			echo "<a href='".$naddr."'>Show next testimonial</a>";
+			echo "<br><br>";
+		}
+		else if($id == $counter){
+			echo "<a href='".$paddr."'>Show previous testimonial</a>&nbsp;&nbsp;&nbsp;";
+		}
+		else{
+			echo "There are no more testimonials";
+		}
+
+
 ?>
+
+<p> Insert an id to show a testimonial: <p>
+<form action="showTestimonial.php" method="get">
+	<input type="text" name="id"><br>
+	<input type="submit" value="search">

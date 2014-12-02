@@ -1,7 +1,7 @@
 <?php
 
-	$user_name = $_GET['username'];
-	$pwd = $_GET['password'];
+	$user_name = $_POST['username'];
+	$pwd = $_POST['password'];
 
 	$host = "db.ist.utl.pt";
 	$user = "ist173214";

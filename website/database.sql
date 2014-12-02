@@ -23,7 +23,7 @@ insert into mailinglist values ('This', 'this@gmails.com');
 insert into mailinglist values ('Admin', 'admin@fakecompany.com');
 
 insert into testimonial values ('“It is just brilliant. I will recommend it to everyone I know!', 1);
-insert into testimonial values ('“ a’m really glad these guys got out there. I have bought it and now I think perhaps I should have invested!”
+insert into testimonial values ('“ I am really glad these guys got out there. I have bought it and now I think perhaps I should have invested!”
 ', 2);
 insert into testimonial values ('"Wow! That says it all really."', 3);
 insert into testimonial values ('“What a product! Why didnt someone think of it sooner? "', 4);
