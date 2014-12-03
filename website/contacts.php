@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+	<!--<meta charset="utf-8">-->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Fake Company | Contacts</title>
 	<link rel="stylesheet" href="main.css">
@@ -40,25 +40,58 @@
 		</form>
 	</div>
 	<div class = "WallTestimonial">
-		<form action="testimonial.php" method="GET">
+		<form action="contacts.php" method="GET">
 			<p> Add your own testimonial!</p>
 			Name:<br><input type="text" name="username"><br>
 			Testimonial:<br><input type="text" name="test"><br>
 			<input type="submit" value="Post!">
 		</form>
 	<?php
-		session_start();
-		echo $_SESSION['username'];
-		echo "\n";
-		echo $_SESSION['test'];
+
+	$username = $_GET['username'];
+    $test = $_GET['test'];
+    $counter = 0;
+    /*$username = $_POST['username'];
+    $testimonial = $_POST['test'];*/
+	$host = "db.ist.utl.pt";
+	$user = "ist173214";
+	$pass = "quhh2828";
+	$dbname = $user;
+	$tablename = "testimonial";
+	
+	$db = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+	if ($username != NULL){
+		$sql = "INSERT INTO $tablename (name, test) VALUES ('$username','$test');";
+		$result = $db->query($sql);
+	}
+	
+
+	$all = "SELECT * FROM testimonial;";
+	$process=$db->query($all);
+
+	foreach($process as $row){
+		$counter++;
+	}
+
+	$new = "SELECT * FROM testimonial WHERE id=$counter;";
+	$show=$db->query($new);
+
+	foreach($show as $try){
+		$text= $try['test'];
+		$name= $try['name'];
+		echo($text.' - '.$name.'<br>');
+	
+	}
+
+
 
 	?>
 	</div>
 	<div class="testimonials">
-		<a href="showTestimonial.php?id=1">Show Testimonials.</a>
-		<!--<form action="showTestimonial.php" method="GET">
-			<input type="submit" value="show">
-		</form>-->
+		<a href="showTestimonial.php?id=1">Show more testimonials.</a>
+
 	</div>
 </body>
 </html>

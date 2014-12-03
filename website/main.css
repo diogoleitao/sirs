@@ -75,3 +75,8 @@ ul li {
 .feedback {
 	padding: 10px 0 20px 30px;
 }
+
+.showTestimonial input[type="text"] {
+	width: 20px;
+	height: 20px;
+}
