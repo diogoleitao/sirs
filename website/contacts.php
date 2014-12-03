@@ -46,6 +46,13 @@
 			Testimonial:<br><input type="text" name="test"><br>
 			<input type="submit" value="Post!">
 		</form>
+	<?php
+		session_start();
+		echo $_SESSION['username'];
+		echo "\n";
+		echo $_SESSION['test'];
+
+	?>
 	</div>
 	<div class="testimonials">
 		<a href="showTestimonial.php?id=1">Show Testimonials.</a>
