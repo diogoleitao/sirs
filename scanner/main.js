@@ -35,5 +35,4 @@ urls.forEach(function(url, urlIndex, urls){
 	}
 });
 
-process.exit();
 });
