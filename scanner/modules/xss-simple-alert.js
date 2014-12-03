@@ -11,7 +11,7 @@ var request = require('request');
 var cheerio = require("cheerio");
 var utilities = require("../utilities/");
 module.exports = {
-	run: function(url){
+	run: function (url) {
 		var injectableForms = [];
 
 		// Parsing the url and the queryString arguments
@@ -25,7 +25,7 @@ module.exports = {
 			$ = cheerio.load(body);
 			var forms = $("form");
 			// Iterate through all forms and test them individually
-			forms.each(function(index, form){
+			forms.each(function (index, form) {
 				
 				var action = $(this).attr("action");
 				var method = $(this).attr("method") || "GET";

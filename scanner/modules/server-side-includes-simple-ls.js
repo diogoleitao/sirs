@@ -1,4 +1,4 @@
-/**
+/*
 	Diogo Leitão
 	22:16 30/11/2014 
 	This modules simulates a SSI (server side includes) attack.
@@ -20,13 +20,13 @@ module.exports = {
 		// Get correspondent page		
 		var res = request('GET', urlObject.format());
 		var $;
-		if (res.statusCode == 200) {
+		if (res.statusCode === 200) {
 			// Get all forms in page via CSS selector powered by Cheerio
 			$ = cheerio.load(res.getBody().toString());
 			var forms = $("form");
 
 			// Iterate through all forms and test them individually
-			forms.each(function(index, form) {
+			forms.each(function (index, form) {
 				var action = $(this).attr("action");
 				var method = $(this).attr("method");
 				var inputs = $(this).children(":input");
@@ -38,10 +38,10 @@ module.exports = {
 					// Construct Request Body (form-data)
 					var formBody = "";
 					for (var input in inputsArray) {
-						var prependAmpersand = (formBody.length != 0);
-						var inject = $(inputsArray[input]).attr("name") == $(inputsArray[testingInput]).attr("name");
+						var prependAmpersand = (formBody.length !== 0);
+						var inject = $(inputsArray[input]).attr("name") === $(inputsArray[testingInput]).attr("name");
 						formBody += (prependAmpersand ? "&" : "");
-						formBody += $(inputsArray[input]).attr("name") + "=" + (inject ? SSI : ($(inputsArray[input]).val() == "" || $(inputsArray[input]).val() == undefined ? "default" : $(inputsArray[input]).val()));
+						formBody += $(inputsArray[input]).attr("name") + "=" + (inject ? SSI : ($(inputsArray[input]).val() === "" || $(inputsArray[input]).val() === undefined ? "default" : $(inputsArray[input]).val()));
 					}
 					var res_form = request(method, urlObject.format(), {
 						headers: {
@@ -49,27 +49,40 @@ module.exports = {
 						},
 						body: formBody
 					});
-					if (res_form.getBody().toString().toLowerCase().indexOf(".php".toLowerCase()) > -1) {
+
+					if (res_form.getBody().toString().toLowerCase().indexOf(".php".toLowerCase()) > -1) { //PHP SCRIPTS
 						// SSI vulnerability found
-						if (injectableForms[actionUrlObject] == undefined) {
+						if (injectableForms[actionUrlObject] === undefined) {
 							injectableForms[actionUrlObject] = [];
 						}
 						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
-					} else if (res_form.getBody().toString().toLowerCase().indexOf(".py".toLowerCase()) > -1) {
+					} else if (res_form.getBody().toString().toLowerCase().indexOf(".py".toLowerCase()) > -1) { //PYTHON SCRIPTS
 						// SSI vulnerability found
-						if (injectableForms[actionUrlObject] == undefined) {
+						if (injectableForms[actionUrlObject] === undefined) {
 							injectableForms[actionUrlObject] = [];
 						}
 						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
-					} else if (res_form.getBody().toString().toLowerCase().indexOf(".".toLowerCase()) > -1) {
+					} else if (res_form.getBody().toString().toLowerCase().indexOf(".asp".toLowerCase()) > -1) { //AJAX SCRIPTS
 						// SSI vulnerability found
-						if (injectableForms[actionUrlObject] == undefined) {
+						if (injectableForms[actionUrlObject] === undefined) {
 							injectableForms[actionUrlObject] = [];
 						}
 						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
-					} else if (res_form.getBody().toString().toLowerCase().indexOf(".".toLowerCase()) > -1) {
+					} else if (res_form.getBody().toString().toLowerCase().indexOf(".js".toLowerCase()) > -1) { //JAVASCRIPT SCRIPTS
 						// SSI vulnerability found
-						if (injectableForms[actionUrlObject] == undefined) {
+						if (injectableForms[actionUrlObject] === undefined) {
+							injectableForms[actionUrlObject] = [];
+						}
+						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
+					} else if (res_form.getBody().toString().toLowerCase().indexOf(".pl".toLowerCase()) > -1) { //PERL SCRIPTS
+						// SSI vulnerability found
+						if (injectableForms[actionUrlObject] === undefined) {
+							injectableForms[actionUrlObject] = [];
+						}
+						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
+					} else if (res_form.getBody().toString().toLowerCase().indexOf(".rb".toLowerCase()) > -1) { //RUBY SCRIPTS
+						// SSI vulnerability found
+						if (injectableForms[actionUrlObject] === undefined) {
 							injectableForms[actionUrlObject] = [];
 						}
 						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
@@ -77,23 +90,21 @@ module.exports = {
 				}
 
 			});
-			//console.log(injectableForms);
 			// Produce result string
 			var resultString = "SSI Simple 'ls' command Module: ";
-			if (injectableForms.length == 0) {
+			if (injectableForms.length === 0) {
 				resultString += "no vulnerable forms found on page.";
 			} else {
 				resultString += "\n";
 			}
 
-			for (var form in injectableForms) {
+			injectableForms.forEach(function (index, form) {
 				resultString += "\tIn form which action is " + form + "\n";
-				resultString += "\t\t Variables " + utilities.arrayToCommaSeparatedString(injectableForms[form]) + " seem to be vulnerable.";
-			}
+			});
 
 			return resultString;
 		} else {
-			return "SSI Simple 'ls' command Module: there was an error loading the page."
+			return "SSI Simple 'ls' command Module: there was an error loading the page.";
 		}
 	}
 }
