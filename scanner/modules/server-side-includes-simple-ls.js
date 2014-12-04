@@ -35,10 +35,10 @@ module.exports = {
 						var testingInputName = $(inputsArray[testingInput]).attr("name");
 						var SSI = '<!--#exec cmd="ls" -->';
 						var form = {};
-						inputsArray.forEach(function (index, input) {
+						for(var input in inputsArray){
 							var inject = $(inputsArray[input]).attr("name") == testingInputName; 
-							form[$(inputsArray[input]).attr("name")] = (inject ? SSI : ($(inputsArray[input]).val() == "" || $(inputsArray[input]).val() == undefined ? "default" : $(inputsArray[input]).val()));
-						});
+							form[$(inputsArray[input]).attr("name")] = (inject ? javaScript : ($(inputsArray[input]).val() == "" || $(inputsArray[input]).val() == undefined ? "default" : $(inputsArray[input]).val()));
+						}
 
 						if (method == "GET") {
 							var actionWithQuery = actionUrlObject + "?" + require('querystring').stringify(form);
