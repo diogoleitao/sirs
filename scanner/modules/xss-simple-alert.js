@@ -48,9 +48,9 @@ module.exports = {
 						request({url: actionWithQuery}, function(err,httpResponse,body){
 							if(body.toLowerCase().indexOf("<script type='text/javascript'>alert('xss test');</script>".toLowerCase()) > -1){
 								if(!err){
-									console.log("XSS Simple Alert Module: Input with name " + testingInputName + " seems to be vulnerable to XSS Injection");
+									console.log(url + " - XSS Simple Alert Module: Input with name " + testingInputName + " seems to be vulnerable to XSS Injection");
 								} else {
-									console.log("XSS Simple Alert Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									console.log(url + " - XSS Simple Alert Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
 								}
 							}
 						});
@@ -58,9 +58,9 @@ module.exports = {
 						request.post({url: actionUrlObject, form: form}, function(err,httpResponse,body){
 							if(body.toLowerCase().indexOf("<script type='text/javascript'>alert('xss test');</script>".toLowerCase()) > -1){
 								if(!err){
-									console.log("XSS Simple Alert Module: Input with name " + testingInputName + " seems to be vulnerable to XSS Injection");
+									console.log(url + " - XSS Simple Alert Module: Input with name " + testingInputName + " seems to be vulnerable to XSS Injection");
 								} else {
-									console.log("XSS Simple Alert Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									console.log(url + " - XSS Simple Alert Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
 								}
 							}
 						});

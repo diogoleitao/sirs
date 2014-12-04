@@ -6,12 +6,12 @@
 */
 
 /** 
-	All test modules are an object containing a single run function
-	that receives a url to be scanned and returns a test result string
+	All modules are objects containing a single run function
+	that receives a url to be scanned and print a result string
 	for simplicity purposes. 
 */
 module.exports = {
 	run: function(url){
-		return "Test scan module: run against target url.";
+		console.log(url + " - Test scan module: ran.");
 	}
 }
