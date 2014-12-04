@@ -29,9 +29,8 @@ console.log("Available scan modules: " + utilities.objectToCommaSeparatedString(
 
 /* Running all available modules for all available urls */
 urls.forEach(function(url, urlIndex, urls){
-	console.log("Scanning url: " + url + " with " + Object.keys(scanModules).length + " modules.");
 	for(var moduleName in scanModules){
-		console.log(scanModules[moduleName].run(url));
+		scanModules[moduleName].run(url);
 	}
 });
 
