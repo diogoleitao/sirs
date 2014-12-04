@@ -6,7 +6,7 @@
 	can be executed on a form
 */
 var Url = require("url");
-var request = require('sync-request');
+var request = require('request');
 var cheerio = require("cheerio");
 module.exports = {
 	run: function (url) {
