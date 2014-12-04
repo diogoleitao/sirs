@@ -1,5 +1,6 @@
 <?php
 
-echo("You just downloaded some malware.");
+$filename = $_GET['id'];
+include $filename;
 
 ?>

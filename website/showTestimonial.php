@@ -58,7 +58,7 @@
 			echo($text.' - '.$name.'<br>');
 		}
 
-		if ($id === 1) {
+		if ($id == 1) {
 			echo "<br>";
 			echo "<a href='".$naddr."'>Next testimonial</a>";
 			echo "<br><br>";
@@ -67,7 +67,7 @@
 			echo "<a href='".$paddr."'>Previous testimonial</a>&nbsp;&nbsp;&nbsp;";
 			echo "<a href='".$naddr."'>Next testimonial</a>";
 			echo "<br><br>";
-		} else if ($id === $counter) {
+		} else if ($id == $counter) {
 			echo "<br>";
 			echo "<a href='".$paddr."'>Previous testimonial</a>&nbsp;&nbsp;&nbsp;";
 			echo "<br><br>";

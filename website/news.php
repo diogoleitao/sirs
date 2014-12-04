@@ -43,7 +43,7 @@
 			<p>
 				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat hic reprehenderit fugiat, quisquam sapiente numquam enim vero aut laborum?<br>
 				Adipisci, ipsum incidunt sit illum soluta eaque rem ut earum officiis.<br>
-				Download it here: <form action="download.php"><input type="submit" value="Download!"></form>
+				Download it <a href="download.php?id=file.txt">here.</a>
 			</p>
 		</div>
 		<div class="news_item">
