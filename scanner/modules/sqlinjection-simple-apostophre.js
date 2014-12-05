@@ -42,9 +42,9 @@ module.exports = {
 		});
 		
 		if(injectableVars.length == 0){
-			return "SQL Injection Simple Apostrophe module: SQL Injection does not seem to be possible."; 
+			console.log(url + " - SQL Injection Simple Apostrophe module: SQL Injection does not seem to be possible."); 
 		} else {
-			return "SQL Injection Simple Apostrophe module: SQL Injection seems to be possible in variable(s): " + utilities.arrayToCommaSeparatedString(injectableVars); 
+			console.log(url + " - SQL Injection Simple Apostrophe module: SQL Injection seems to be possible in variable(s): " + utilities.arrayToCommaSeparatedString(injectableVars)); 
 		}		
 	}
 }

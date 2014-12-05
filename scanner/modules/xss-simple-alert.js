@@ -47,21 +47,19 @@ module.exports = {
 						var actionWithQuery = actionUrlObject + "?" + require('querystring').stringify(form);
 						request({url: actionWithQuery}, function(err,httpResponse,body){
 							if(body.toLowerCase().indexOf("<script type='text/javascript'>alert('xss test');</script>".toLowerCase()) > -1){
-								if(!err){
-									console.log("XSS Simple Alert Module: Input with name " + testingInputName + " seems to be vulnerable to XSS Injection");
-								} else {
-									console.log("XSS Simple Alert Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
-								}
+								console.log(url + " - XSS Simple Alert Module: Input with name " + testingInputName + " seems to be vulnerable to XSS Injection");
+							}
+							if(httpResponse.statusCode > 307){
+									console.log(url + " - XSS Simple Alert Module: Testing input with name " + testingInputName + " caused error " + httpResponse.statusCode + " on the server");
 							}
 						});
 					} else {
 						request.post({url: actionUrlObject, form: form}, function(err,httpResponse,body){
 							if(body.toLowerCase().indexOf("<script type='text/javascript'>alert('xss test');</script>".toLowerCase()) > -1){
-								if(!err){
-									console.log("XSS Simple Alert Module: Input with name " + testingInputName + " seems to be vulnerable to XSS Injection");
-								} else {
-									console.log("XSS Simple Alert Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
-								}
+								console.log(url + " - XSS Simple Alert Module: Input with name " + testingInputName + " seems to be vulnerable to XSS Injection");
+							}
+							if(httpResponse.statusCode > 307){
+									console.log(url + " - XSS Simple Alert Module: Testing input with name " + testingInputName + " caused error " + httpResponse.statusCode + " on the server");
 							}
 						});
 					}

