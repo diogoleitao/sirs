@@ -63,8 +63,11 @@
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 	if ($username != NULL){
-		$sql = "INSERT INTO $tablename (name, test) VALUES ('$username','$test');";
-		$result = $db->query($sql);
+		$sql = $db->prepare("INSERT INTO $tablename (name, test) VALUES (:name, :test)");
+		$sql->bindParam('name', $username);
+		$sql->bindParam('test', $test);
+		
+		$sql->execute();
 	}
 	
 
